@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.pde.pdedemo.model.AzureModel;
 import com.pde.pdedemo.service.AzureStorageSvc;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -33,8 +34,15 @@ public class BlobController {
     
     @PostMapping("/writeBlobFile")
     public String writeBlobFile(@RequestBody String data) throws IOException {
-        try (OutputStream os = ((WritableResource) this.blobFile).getOutputStream()) {
-            os.write(data.getBytes());
+    	String  readFromFile = StreamUtils.copyToString(
+                this.blobFile.getInputStream(),
+                Charset.defaultCharset());
+    	
+    	String dataFinal=readFromFile +  System.lineSeparator() + data; 
+
+       try (OutputStream os = ((WritableResource) this.blobFile).getOutputStream()) {
+    	   
+            os.write(dataFinal.getBytes());
         }
         return "file was updated";
     }
