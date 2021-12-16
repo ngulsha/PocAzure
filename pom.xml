@@ -15,6 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<azure.version>3.10.0</azure.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -25,6 +26,11 @@
    			<groupId>com.azure.spring</groupId>
    			<artifactId>azure-spring-boot-starter-storage</artifactId>
    			<version>3.10.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId>
 		</dependency>
 <!-- https://mvnrepository.com/artifact/com.microsoft.azure/azure-spring-boot-starter -->
 <!-- <dependency>
@@ -53,6 +59,19 @@
 		</dependency>
 		
 	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.azure.spring</groupId>
+				<artifactId>azure-spring-boot-bom</artifactId>
+				<version>${azure.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 
 	<build>
 		<plugins>
