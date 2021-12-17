@@ -1,5 +1,8 @@
 package com.pde.pdedemo.service;
 
+import com.pde.pdedemo.model.KeySecretModel;
+
 public interface SecretVaultSvc {
-	public void createSecret(String secretName, String secretValue) throws InterruptedException, IllegalArgumentException;
-}
+	public String createSecret( KeySecretModel keySecretModel );
+	public String getSecret(KeySecretModel keySecretModel) ;
+	}
