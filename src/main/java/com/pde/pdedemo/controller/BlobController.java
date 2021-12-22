@@ -51,5 +51,10 @@ public class BlobController {
     public String readBlobItem(@RequestBody AzureModel azureModel) throws IOException {
     	return azureStorageSvc.readFromBlob(azureModel.getContainerName(), azureModel.getFileName());
     }
+    
+    @PostMapping("/writeBlobItem")
+    public String writeBlobItem(@RequestBody AzureModel azureStorageModel) throws IOException {
+    	return azureStorageSvc.writeToBlob(azureStorageModel.getContainerName(), azureStorageModel.getFileName(), azureStorageModel.getData());
+    }
 
 }

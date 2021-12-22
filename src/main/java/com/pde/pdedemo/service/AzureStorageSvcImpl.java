@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.WritableResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
@@ -18,6 +20,12 @@ import com.azure.storage.blob.BlobServiceClientBuilder;
 
 @Component
 public class AzureStorageSvcImpl implements AzureStorageSvc{
+	
+	@Value("${storage.connectionString}")
+    private String connectionString;
+	
+	@Value("${azure.storage.blob-endpoint}")
+    private String endpoint;
 	
 	@Override
 	public String readFromBlob(String containerName, String fileName) throws IOException {
@@ -37,9 +45,26 @@ public class AzureStorageSvcImpl implements AzureStorageSvc{
 	}
 
 	@Override
-	public void writeToBlob(String containerName, String fileName, String contect) {
-		// TODO Auto-generated method stub
+	public String writeToBlob(String containerName, String fileName, String data) throws IOException {
 		
+		String searchLocation = "azure-blob://" + containerName + "/" + fileName;
+		
+		BlobServiceClient client = new BlobServiceClientBuilder().connectionString(connectionString).endpoint(endpoint).buildClient();
+		AzureStorageResourcePatternResolver storageResourcePatternResolver = new AzureStorageResourcePatternResolver(client);
+
+		Resource resource = storageResourcePatternResolver.getResource(searchLocation);
+		
+		String  readFromFile = StreamUtils.copyToString(
+				resource.getInputStream(),
+                Charset.defaultCharset());
+    	
+    	String dataFinal=readFromFile +  System.lineSeparator() + data; 
+
+       try (OutputStream os = ((WritableResource) resource).getOutputStream()) {
+    	   
+            os.write(dataFinal.getBytes());
+        }
+        return "file was updated";
 	}
 
 	@Override
