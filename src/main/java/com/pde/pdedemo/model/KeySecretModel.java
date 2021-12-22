@@ -18,9 +18,6 @@ public class KeySecretModel {
 	}
 
 
-
-
-
 	public String getSecretName() {
 		return secretName;
 	}
